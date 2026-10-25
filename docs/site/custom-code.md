@@ -47,25 +47,10 @@ script doesn't export.
 
 ## Every page's HTML
 
-`manifest.document` is code that is part of every page's HTML — written by the server that sends the
-page, not added by the site in the browser — so it is there before anything loads:
-
-```json
-"document": {
-  "head": "<meta name=\"google-site-verification\" content=\"…\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\">",
-  "bodyEnd": "<noscript>Turn on JavaScript to shop here.</noscript>"
-}
-```
-
-| Key | Goes | For |
-| --- | --- | --- |
-| `head` | At the end of `<head>` | Meta and verification tags, preconnects, fonts, icons, analytics that must load first |
-| `bodyEnd` | Just before `</body>` | Chat widgets, `<noscript>` fallbacks, deferred scripts |
-
-Always every page; never in the builder. Search engines, link previews and site checks see it
-(they often don't run the site's scripts). Checks warn when `head` holds a body tag (`<div>`,
-`<img>`…), which the browser would move out of `<head>` with everything after it. Hosts: see
-[../host/renderer.md](../host/renderer.md#every-pages-html).
+Code that is part of each page's HTML — written by the host's server, not added in the browser — lives in the
+page HTML file (`document.json`): `head`, `bodyStart`, `bodyEnd` and `root` code for every page or chosen
+paths, beside the title, SEO tags and structured data, with live values from your APIs. See
+[page-html.md](page-html.md).
 
 ## Snippets
 
@@ -77,7 +62,7 @@ Always every page; never in the builder. Search engines, link previews and site 
              "pages": ["/", "/products/:slug"], "code": "<script async src=…></script>" }]
 ```
 
-Snippets are added by the site in the browser, so they can run on chosen pages only; for code that
-must be in the HTML itself, use `document` above. `where`: `head` · `body-start` · `body-end`. They run on the live site only — never in
+Snippets are added by the site in the browser, so they run as the visitor moves between pages; for code that
+must be in the HTML itself, use the page HTML file above. `where`: `head` · `body-start` · `body-end`. They run on the live site only — never in
 the builder, never with `SynUI({ injections: false })`. The window event
 `synui:navigate` (`detail.path`) counts page views of the single-page site.

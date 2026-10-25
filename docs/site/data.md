@@ -40,6 +40,31 @@ The `List` block repeats its blocks for every item from an API (`source: "api"`,
 `paging` (`none` · `pages` · `more` — the first page only, page numbers, or "Load more", using the endpoint's `pagination`), `pageSize`, and an `empty` message.
 An API list is always asked for one page at a time; its endpoint must be paged ([api-registry.md](api-registry.md#every-get-list-is-paged)).
 
+## Filtered lists
+
+Search, filters, sort, a grid / list switch and page numbers — a marketplace's listing page, a
+job board, a directory, a blog archive — live in the **page address** (`/search?q=tea&brand=acme,zen&min=500&sort=price-asc&page=2`),
+so a filtered page can be shared, bookmarked and gone Back to:
+
+1. The page's data passes the address to the API — and loads again whenever it changes:
+   ```json
+   "data": { "results": { "api": "items.search", "params": {
+     "q": "{{ query.q }}", "brand": "{{ query.brand }}", "min": "{{ query.min }}", "max": "{{ query.max }}",
+     "sort": "{{ query.sort }}", "page": "{{ query.page }}", "limit": 24 } } }
+   ```
+   Empty values aren't sent. `{{ loading.page }}` is true while it loads again (a States block of `page`).
+2. The Filter blocks change the address: `Search` (`q`), `Choice` (checkboxes with counts from the
+   answer's facets — `"items": "{{ results.facets.brand }}"`; a sort dropdown; a grid / list switch),
+   `Range` (`min`, `max`), `ActiveFilters` (chips), `Pager` (`page`, `"total": "{{ results.total }}"`).
+   Any button can do the same with a `query` step ([steps.md](steps.md)).
+3. A List shows `{{ results.items }}`; `"rowsWhen": "query.view == 'list'"` makes it one per row, and
+   its card can switch design with `"if": "query.view == 'list'"`.
+4. The filters sit down the left in a **Sheet** with `"inline": "desktop"`: in place on wide screens, a
+   panel that slides in on phones (a "Filters" button with `"hide": ["desktop"]` opens it).
+
+A filter changes go back to page 1 (the `page` key). Values a key holds several of are
+comma-separated (`acme,zen`); the API reads them as it likes.
+
 ## Loading states
 
 ```json
@@ -67,5 +92,6 @@ checkout prices it again.
 - The `cart` step adds `{{ product }}` / `{{ item }}`; an id alone adds one more of a line already there, or
   finds the page's product with that id ([steps.md](steps.md)).
 - `ProductCard`, `AddToCart`, `CartLines`, `CartSummary` and `CartButton` use it ([blocks.md](blocks.md)).
+- Saved-for-later lists, compare and the like are site-wide state lists, not carts — [states.md](states.md#saved-lists-wishlist-compare-follow).
 - In scripts: `cart.add(item, qty?)`, `cart.update(lineId, qty)`, `cart.remove(lineId)`, `cart.clear()`.
 

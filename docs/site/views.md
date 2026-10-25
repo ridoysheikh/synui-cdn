@@ -42,8 +42,12 @@ A view is a tree of nodes. Every page, layout, component and section is one.
 | `money` | `{{ product.price \| money }}` | The price in the site's currency and locale — `BDT 1,250` for `en-BD` (or `money: 'USD'`) |
 | `date` | `{{ order.at \| date: 'long' }}` | Date in the site's locale and timezone (`short` · `medium` · `long` · `full`) |
 | `default` | `{{ user.name \| default: 'Guest' }}` | The fallback when empty |
+| `then` | `{{ item.inStock \| then: 'In stock' \| default: 'Sold out' }}` | The text when the value is set (not empty, false or 0), else nothing — with `default`, an either-or |
 | `count` | `{{ cart.lines \| count }}` | Length of a list |
-| `first` | `{{ product.images \| first }}` | First item |
+| `first` / `last` | `{{ product.images \| first }}` | First / last item |
+| `take` | `{{ global.recent \| take: 4 }}` | The first n items |
+| `reverse` | `{{ global.recent \| reverse }}` | The list backwards (newest first) |
+| `sum` | `{{ cart.lines \| sum: 'qty' }}` | Numbers added up, or one field of each item |
 | `join` | `{{ tags \| join: ' · ' }}` | A list as text |
 | `truncate` | `{{ text \| truncate: 60 }}` | Cut with `…` |
 | `upper` / `lower` | | Case |
@@ -54,13 +58,13 @@ A view is a tree of nodes. Every page, layout, component and section is one.
 
 | Name | Where | What |
 | --- | --- | --- |
-| `site` | everywhere | `{ name, locale, currency, timezone, logo, nav }` and every `vars` value — [files.md](files.md#manifestjson) |
+| `site` | everywhere | `{ name, locale, currency, timezone, logo, url, nav }` (`url`: the site's address, `seo.siteUrl`) and every `vars` value — [files.md](files.md#manifestjson) |
 | `cart` | everywhere | `{ lines, count, subtotal }` — [data.md](data.md#the-cart) |
 | `route` | everywhere | `{ path }` — the current address |
 | `session` | everywhere | `{ token, user }` after a `login` step |
 | `global` | everywhere | Site-wide state |
 | `state` | a page | The page's state |
-| `params`, `query` | a page | Route params, query string |
+| `params`, `query` | a page | Route params; the address's search (`?brand=acme,zen` → `query.brand`), changed by the `query` step and the Filter blocks |
 | *data names* | a page / block / component | Loaded data, plus `loading.x`, `failed.x` |
 | `props` | inside a component | What the use passed in |
 | `item` (or `as`) | inside `each` / List | The current item |
@@ -70,5 +74,7 @@ A view is a tree of nodes. Every page, layout, component and section is one.
 ## Conditions
 
 `if` (and `if` steps' `when`) take:
-`"path"` · `"!path"` · `"path == 'x'"` · `"path != 3"` · `"path > 0"` (`>=`, `<`, `<=`).
+`"path"` · `"!path"` · `"path == 'x'"` · `"path != 3"` · `"path > 0"` (`>=`, `<`, `<=`) ·
+`"list has item.id"` / `"list lacks item.id"` (a list holds the item, or one with its id; a
+comma-separated address value holds a part: `"query.brand has 'acme'"`).
 An empty list counts as false. Braces are optional: `"{{ cart.count }}"` works too.

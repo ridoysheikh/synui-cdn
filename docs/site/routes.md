@@ -19,7 +19,7 @@
 | `path` | React Router pattern: `/`, `/products`, `/products/:slug`, `*`. Children write theirs in full. |
 | `page` | The page file. Its script sits beside it as `.js`. |
 | `layout` | A layout file; `null` = no layout; unset = the default (or, for a child, see below). |
-| `title`, `description`, `image` | SEO; may bind to the page's data. `seo.titleTemplate` wraps the title. |
+| `title`, `description`, `image` | SEO; may bind to the page's data. `seo.titleTemplate` wraps the title. The host's server writes the same into the page's HTML, with more per path (meta, structured data, status) — [page-html.md](page-html.md). |
 | `noindex`, `sitemap` | Keep out of search; `{ priority, changefreq }`. |
 | `children` | Sub-routes. |
 

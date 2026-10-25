@@ -91,29 +91,54 @@ redirects run before the page loads.
 
 ## Every page's HTML
 
-`manifest.document` holds site-wide code that belongs to the document itself — `head` (end of
-`<head>`) and `bodyEnd` (just before `</body>`). The renderer never adds it: **your server writes it
-into the HTML it sends for every page**, so it is there before any script runs and search engines,
-link previews and site-verification checks see it. `@synui/renderer/core` has the helpers (no DOM —
-Node, edge workers, build scripts):
+The renderer draws the site in the browser; **your server writes each page's HTML** — the title, search and
+link-preview tags, structured data and the site's own code for that address, from its page HTML file
+([../site/page-html.md](../site/page-html.md)). Search engines, link previews and crawlers that never run
+scripts read it. `@synui/renderer/core` does the work (no DOM, no React — Node, edge workers, build scripts):
 
 ```ts
-import { writeDocument, documentCode } from "@synui/renderer/core"
+import { pageDocument, writeDocument } from "@synui/renderer/core"
 
-res.send(writeDocument(indexHtml, manifest))      // head before </head>, bodyEnd before </body>
-const { head, bodyEnd } = documentCode(manifest)  // the two snippets, when you build the HTML yourself
+app.get("*", async (req, res) => {
+  const doc = await pageDocument({ baseURL: "https://s3-endpoint/bucket/site-id/", path: req.originalUrl, vars: { api: "https://api.example.com" } })
+  if (doc.redirect) return res.redirect(doc.status, doc.redirect)
+  res.status(doc.status).send(writeDocument(indexHtml, doc))
+})
 ```
 
-`writeDocument` wraps each snippet in `<!-- synui:head -->` / `<!-- synui:body-end -->` markers and
-replaces what is between them on a second run, so writing a cached page again doesn't double it.
-The test app's server does this for the preview (`test-preview/site-document.ts`).
+**`pageDocument(config)`** — `baseURL` and `manifest` as the renderer gets them, `path` (the address asked for,
+with its query), `vars` (the renderer's `options.vars`: what `{{ site.* }}` reads — an API's base URL, and `url`,
+the address this site answers on, when one site folder serves several domains), `files` (site files already in
+hand), `timeout` (ms to wait for one API answer, default 3000). It finds the route, reads the manifest, the page
+HTML file and the page's file, loads only the data the bindings read — the page's own calls and site-wide
+states loaded from an API, the same the browser makes — and answers:
+
+| Field | What |
+| --- | --- |
+| `status` | 200 · 404 (no page shows the address, or the not-found route) · 301 / 302 (a site redirect) · an entry's own |
+| `redirect` | Where a redirect goes |
+| `title`, `lang` | The full title; the page's language |
+| `head`, `bodyStart`, `bodyEnd`, `root` | The HTML for each place: the SEO tags (marked `data-syn-seo`) and structured data first in `head`, then the site's code |
+| `files` | Every site file it read: pass them back as `files` next time (no reading again), or to the renderer's `options.files` |
+| `problems` | What went wrong without stopping the page — a file that didn't parse, an API that failed or was slow — for your log |
+
+**`writeDocument(html, doc)`** puts `head` before `</head>` (its `<title>` replacing the page's own),
+`bodyStart` after `<body>`, `bodyEnd` before `</body>`, `root` inside the element with `id="root"`, and `lang`
+on `<html>`. Each part sits between `<!-- synui:… -->` markers and is replaced on a second run, so a cached page
+written again isn't doubled. `documentCode(doc)` gives the wrapped parts when you build the HTML yourself. Both
+still take a manifest with the older inline `document`.
+
+Answers with `keep` (or a state key's `ttl`) are kept in the server's memory that long; cache the finished HTML
+per address as your traffic needs. The site in the browser keeps the first page's tags and writes its own from
+the next page on. The test app's server does all of this for the preview, with real statuses
+(`test-preview/site-document.ts`).
 
 ## Security
 
 - Custom HTML blocks render in a sandboxed iframe.
 - `manifest.inject` snippets run only when `options.injections` is on — never in the builder.
-- `manifest.document` is the site's code in every page's HTML: like injections, it runs with the
-  site's full access, which is why a site lives on its own domain.
+- The page HTML file's code (`head`, `bodyStart`, `bodyEnd`) runs in every page with the site's full access,
+  like injections — which is why a site lives on its own domain. Values bound into it are escaped as HTML.
 - Page scripts are ES modules run in the page (not yet a Worker sandbox): serve the
   site from its **own domain**, where no session cookies live.
 - API keys in a published registry are public: only browser-safe keys belong there.

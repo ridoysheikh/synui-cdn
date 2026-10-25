@@ -83,7 +83,14 @@ plain `<img>` can't send headers). A 401 / 403 shows on that library as "check i
 ## The design catalog in this repo
 
 `npm run catalog` (`catalog/build.mjs`, from `catalog/base/`) generates `catalog/kroybd/`:
-complete shops with checkout (`shops.mjs`; Bazaar, Atelier, Fresh Market and more) plus pages, layouts,
+complete shops with checkout (`shops.mjs`; Bazaar, Atelier, Fresh Market and more), **MegaHaat** — a 28-page
+marketplace in the manner of the big online stores (`catalog/marketplace/`: dark search-first header with
+departments and account menu; home of card tiles and product strips; search with a filter sidebar in the page
+address; dense product pages with a buy box, offers, bought-together, specs and paged reviews; deals,
+departments, best sellers, cart, checkout, account, orders, saved lists, compare, help, gift cards,
+membership, selling and brand stores — with its own API registry and demo data, and a page HTML file: the shop's
+live details on every page, Product / CollectionPage / Brand / Organization structured data, 404s for missing
+products, results pages kept out of search) — plus pages, layouts,
 sections, parts, forms and flows, all on the current blocks — moving announcement, hero
 slider, product carousels with loading cases, reviews with stars, zoom spotlight, video,
 before / after, sale countdown, payment-logo marquee, phone menu sheet on `menuOpen`,

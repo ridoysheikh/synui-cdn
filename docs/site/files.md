@@ -16,6 +16,7 @@ pages/x.js          that page's loaders and actions (optional ES module)
 forms/x.json        fields, checks and what happens on submit
 scripts/site.js     actions shared by every page (optional)
 api/registry.json   servers · sign-in schemes · endpoints · actions (flows) · shared schemas
+document.json       each page's HTML, written by the host's server: title, SEO, structured data, code (optional)
 icons.json          drawings of every icon the site uses
 ```
 
@@ -36,7 +37,7 @@ per dynamic route (`/products/:slug`) serves every URL.
 | `layout`, `layouts` | Default layout for every route; every layout file, used or not. |
 | `routes` | Pages and sub-pages — [routes.md](routes.md). |
 | `nav` | Named menus: `{ main: [{ label, href, children? }] }`, shown by Menu blocks. |
-| `seo` | `titleTemplate` (`"%s · Nakshi"`), `description`, `image`, `siteUrl`. |
+| `seo` | `titleTemplate` (`"%s · Nakshi"`, may bind), `description`, `image`, `siteUrl` (`{{ site.url }}`; the canonical address) — [page-html.md](page-html.md). |
 | `redirects` | `[{ from, to, status? }]` (301 by default). |
 | `state`, `persist`, `stateKeys` | Site-wide state — [states.md](states.md). |
 | `components` | Component names (files in `components/`) — [components.md](components.md). |
@@ -45,7 +46,7 @@ per dynamic route (`/products/:slug`) serves every URL.
 | `api` | Registry path (default `api/registry.json`) — the APIs the site calls at run time. |
 | `icons` | Icon drawings (default `icons.json`). |
 | `inject` | Snippets the site adds in the browser, on every page or chosen ones — [custom-code.md](custom-code.md#snippets). |
-| `document` | `head` / `bodyEnd` code in every page's HTML, written by the server — [custom-code.md](custom-code.md#every-pages-html). |
+| `document` | The page HTML file (`document.json`): what the host's server writes into each page's HTML — SEO, structured data, code, per path — [page-html.md](page-html.md). |
 | `prefetch` | `hover` (default) · `visible` · `off` — [data.md](data.md#loading-ahead). |
 | `files` | Published snapshots only: path → content hash. |
 

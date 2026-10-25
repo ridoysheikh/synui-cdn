@@ -23,15 +23,20 @@ lines and fields, status, charts, greys, `--radius`, `--font`). Change a value, 
 `var(--name)`. "Variables" always means these CSS variables; app values are
 [states](states.md).
 
-`theme.json` keeps only `motion`: `none` · `subtle` · `normal` (default) · `lively` —
-[styles.md](styles.md#motion).
+`theme.json` keeps how the site moves:
+
+| Key | Values |
+| --- | --- |
+| `motion` | `none` · `subtle` · `normal` (default) · `lively` — how far and how long blocks move ([styles.md](styles.md#motion)) |
+| `scroll` | `native` (default) · `smooth` — a mouse wheel glides the page. Touch, keys, the scrollbar and links keep the browser's own scrolling; a wheel over something that scrolls by itself (a sheet, a menu, or anything with `data-syn-native-scroll`) scrolls that; nothing glides while a dialog is open or for people who ask for less motion. |
+| `pages` | `ease` (default — a new page eases in) · `morph` (the browser's view transitions: the page fades across, and blocks sharing a `morph` name glide into place) · `none` |
 
 ## In the builder
 
 | Where | What |
 | --- | --- |
 | Code → `styles/global.css` | The file as text. |
-| Theme | Pickers for the main colours (with contrast against the text on them), corners, font and motion; your own colour variables too. **Each picker writes its variable in the same file** — nothing is kept anywhere else. |
+| Theme | Pickers for the main colours (with contrast against the text on them), corners, font, motion, scrolling and the page change; your own colour variables too. **Each picker writes its variable in the same file** — nothing is kept anywhere else. |
 | Style controls | Spacing, corners, shadow, text size, width and height offer your own variables of the fitting kind beside their fixed steps: `"paddingY": "--section-pad"` → `padding-block: var(--section-pad)`. |
 | Colour pickers | Your own colour variables, under "Yours": `"bg": "brand-gold"`. |
 | A block's Style → Advanced → Variables here | `style.vars`: variables for one block and everything inside — another `primary` for one band: `"vars": { "primary": "#b91c1c" }`. |

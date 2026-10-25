@@ -42,10 +42,31 @@ copied, never changed in place; a missing level is made (a list for a number, el
 | `set` (default) | Replace the value |
 | `add` | Add a number (`-1` to subtract) |
 | `push` / `pull` | Add to / remove from a list (no duplicates) |
+| `toggle` | With a `value`: put it in the list, or take it out if it's there (save / unsave). Without one: flip a yes / no |
 | `clear` | Back to its starting value |
 
-`toggle` flips a yes / no. The "Change a value" step offers every key and every field inside an
+`max` (with `push` or `toggle`) keeps only the newest items: `"op": "push", "max": 12` is a
+"recently viewed" list (an item seen again moves to the newest end). Items count as the same
+when equal or when their `id`s are — so `"value": "{{ item.id }}"` takes `{{ item }}` back out.
+
+The `toggle` step flips a yes / no. The "Change a value" step offers every key and every field inside an
 object. Page scripts get `set`, `merge` and `setGlobal` ([custom-code.md](custom-code.md)).
+
+## Saved lists (wishlist, compare, follow)
+
+A list in site-wide state, remembered between visits:
+
+```json
+"state": { "saved": [] }, "persist": ["saved"]
+```
+
+- A **Toggle button** (`key: "saved"`, `global: true`, `value: "{{ item }}"`) puts the item in or takes it out,
+  and looks "on" while it's there.
+- Show the list with a List of `{{ global.saved }}`; count it with `{{ global.saved | count }}` (a Button's `count`).
+- Ask about one item: `"if": "global.saved has item.id"` · `"global.saved lacks item.id"`.
+
+The same works for compare, followed topics, liked posts, recently viewed (`push` with `max`) — any
+number of lists, each one key.
 
 ## Actions
 

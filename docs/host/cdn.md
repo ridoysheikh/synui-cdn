@@ -15,11 +15,11 @@ https://cdn.jsdelivr.net/gh/ridoysheikh/synui-cdn@<version>/dist/synui.css
 ## Use it in any page
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ridoysheikh/synui-cdn@2.0.0/dist/synui.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ridoysheikh/synui-cdn@2.1.0/dist/synui.css">
 
 <div id="app"></div>
 
-<script src="https://cdn.jsdelivr.net/gh/ridoysheikh/synui-cdn@2.0.0/dist/synui.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ridoysheikh/synui-cdn@2.1.0/dist/synui.js"></script>
 <script>
   SynUI({ target: document.getElementById("app"), baseURL: "https://cdn.example.com/sites/acme/v3/" }).render()
 </script>
@@ -36,10 +36,10 @@ without `target` (JSON can't hold an element): it always renders into `#root`.
 ```html
 <div id="root"></div>
 <script type="application/json" id="syn-boot">{"baseURL": "https://cdn.example.com/sites/acme/v3/", "manifest": "site.json", "options": {"vars": {"api": "https://api.example.com"}}}</script>
-<script src="https://cdn.jsdelivr.net/gh/ridoysheikh/synui-cdn@2.0.0/dist/synui.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/ridoysheikh/synui-cdn@2.1.0/dist/synui.js"></script>
 ```
 
-A server that already read the manifest and this page's file for the HTML (SEO, `writeDocument`) passes them
+A server that already read the manifest and this page's file for the HTML (`pageDocument`'s `files`) passes them
 along as `"options": {"files": {"manifest.json": "…", "pages/home.json": "…"}}` — they aren't fetched again.
 
 ## Prerendering
@@ -61,7 +61,7 @@ npm run release -- --dry-run # build and prepare it in a temp folder; push nothi
 - The CDN repo holds **only** `README.md` (from `scripts/cdn-readme.md`), `docs/` (the renderer's — the
   builder's pages left out) and `dist/` (`synui.js`, `synui.css`, fonts). Nothing else ever goes there.
 - Each version is one tag, **never replaced**: the script refuses a version already there — bump it.
-- Always pin the version in the URL (`@2.0.0`): the files never change and are cached forever. A page moves to
+- Always pin the version in the URL (`@2.1.0`): the files never change and are cached forever. A page moves to
   a new renderer by changing the version in its two URLs.
 - The repo is made once: `gh repo create ridoysheikh/synui-cdn --public`.
 

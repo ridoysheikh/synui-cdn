@@ -17,10 +17,10 @@ See [renderer.md](renderer.md) for every `SynUI` field, [builder.md](builder.md)
 
 ```bash
 # a site
-npm install ./synui-renderer-2.0.0.tgz
+npm install ./synui-renderer-2.1.0.tgz
 
 # the app with the builder (the builder needs the renderer of the same version)
-npm install ./synui-renderer-2.0.0.tgz ./synui-builder-2.0.0.tgz
+npm install ./synui-renderer-2.1.0.tgz ./synui-builder-2.1.0.tgz
 ```
 
 **React 19** is required (`peerDependencies`: `react >=19`, `react-dom >=19`).

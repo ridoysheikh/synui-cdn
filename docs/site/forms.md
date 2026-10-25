@@ -26,7 +26,7 @@ block shows it (`props.form`: a name in `forms/`, `columns`).
 
 | Field | What |
 | --- | --- |
-| `name`, `label`, `type` | `text` · `email` · `phone` · `number` · `textarea` · `select` · `checkbox` |
+| `name`, `label`, `type` | `text` · `email` · `phone` · `number` · `password` (hides what is typed) · `textarea` · `select` · `checkbox` |
 | `placeholder`, `help` | Hints. |
 | `required`, `min`, `max`, `pattern` | Checks, run before submit. |
 | `options` | A select's choices: `[{ label, value }]`. |
