@@ -88,8 +88,8 @@ marketplace in the manner of the big online stores (`catalog/marketplace/`: dark
 departments and account menu; home of card tiles and product strips; search with a filter sidebar in the page
 address; dense product pages with a buy box, offers, bought-together, specs and paged reviews; deals,
 departments, best sellers, cart, checkout, account, orders, saved lists, compare, help, gift cards,
-membership, selling and brand stores — with its own API registry and demo data, and a page HTML file: the shop's
-live details on every page, Product / CollectionPage / Brand / Organization structured data, 404s for missing
+membership, selling and brand stores — with its own API registry and demo data, and a page HTML file of code items: the
+shop's live details on every page, a page-view counter, a function for deal previews, Product / CollectionPage / Brand / Organization structured data, 404s for missing
 products, results pages kept out of search) — plus pages, layouts,
 sections, parts, forms and flows, all on the current blocks — moving announcement, hero
 slider, product carousels with loading cases, reviews with stars, zoom spotlight, video,

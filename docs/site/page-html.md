@@ -1,10 +1,10 @@
-# Page HTML — SEO, structured data and code for each page
+# Page HTML — code, SEO and structured data, as typed items
 
-`document.json` (named by `manifest.document`) is what the **host's server writes into each page's HTML**
-before sending it: the title, search and link-preview tags, structured data (schema.org JSON-LD), and any code
-— for every page, or chosen paths. It is there before any script runs, so search engines, link previews
-(WhatsApp, Facebook, X, Slack), site-verification checks and crawlers that never run JavaScript all read it.
-Values can come live from your APIs.
+`document.json` (named by `manifest.document`) holds every piece of code and SEO the site puts into its pages,
+as **one list of `items`, each of one type** — a title, meta tags, structured data, a pasted snippet, CSS, JS, a
+script file, text for crawlers, or a function that works values out. Each is for every page or the paths it
+names, maybe only when a condition holds, maybe with API data of its own; each **runs** in the page's HTML
+(written by the host's server, so search engines and link previews see it) or in the browser.
 
 ```json
 // manifest.json
@@ -16,89 +16,114 @@ Values can come live from your APIs.
 ```json
 // document.json
 {
-  "meta": { "og:site_name": "{{ global.shop.name }}", "twitter:site": "@shop", "theme-color": "#131921" },
-  "head": "<link rel=\"icon\" href=\"{{ global.shop.logo }}\">\n<script async src=\"https://www.googletagmanager.com/gtag/js?id=G-XXXX\"></script>",
-  "bodyStart": "<noscript><iframe src=\"https://www.googletagmanager.com/ns.html?id=GTM-XXXX\" height=\"0\" width=\"0\" style=\"display:none\"></iframe></noscript>",
-  "bodyEnd": "<noscript>Turn on JavaScript to shop here.</noscript>",
-  "paths": [
-    { "path": "/", "jsonld": { "@context": "https://schema.org", "@type": "Organization", "name": "{{ global.shop.name }}", "logo": "{{ global.shop.logo }}", "url": "{{ site.url }}" } },
-    { "path": "/products/:slug",
-      "meta": { "og:type": "product", "product:price:amount": "{{ product.price }}" },
+  "items": [
+    { "id": "tags", "name": "Shop tags", "type": "meta", "meta": { "og:site_name": "{{ global.shop.name }}", "theme-color": "#131921" } },
+    { "id": "gtag", "name": "Google Analytics", "type": "script", "src": "https://www.googletagmanager.com/gtag/js?id=G-XXXX", "attrs": { "async": true }, "run": "once" },
+    { "id": "views", "name": "Count page views", "type": "js", "run": "visit", "where": "bodyEnd", "code": "gtag('event', 'page_view', { page_path: location.pathname })" },
+    { "id": "print", "name": "Print", "type": "css", "code": "@media print { header { display: none } }" },
+    { "id": "private", "name": "Private pages", "type": "seo", "paths": ["/cart", "/checkout", "/account/*"], "noindex": true, "canonical": false },
+    { "id": "product", "name": "Product", "type": "jsonld", "paths": ["/products/:slug"],
       "jsonld": { "@context": "https://schema.org", "@type": "Product", "name": "{{ product.name }}", "image": "{{ product.images }}",
         "offers": { "@type": "Offer", "price": "{{ product.price }}", "priceCurrency": "{{ site.currency }}",
-          "availability": "{{ product.inStock | then: 'https://schema.org/InStock' | default: 'https://schema.org/OutOfStock' }}" } },
-      "root": "<h1>{{ product.name }}</h1><p>{{ product.description }}</p>" },
-    { "path": "/products/:slug", "if": "!product", "status": 404, "title": "Product not found" },
-    { "path": "/search", "meta": { "robots": "noindex, follow" }, "canonical": "{{ site.url }}/search" },
-    { "path": ["/cart", "/checkout", "/account/*"], "noindex": true, "canonical": false }
+          "availability": "{{ product.inStock | then: 'https://schema.org/InStock' | default: 'https://schema.org/OutOfStock' }}" } } },
+    { "id": "gone", "name": "Missing product", "type": "seo", "paths": ["/products/:slug"], "if": "!product", "status": 404, "title": "Product not found" },
+    { "id": "deal", "name": "Deal in the preview", "type": "function", "paths": ["/products/:slug"], "if": "product.compareAt",
+      "code": "export default ({ data, site }) => ({ description: `Now ${site.currency} ${data.product.price}, was ${data.product.compareAt}` })" }
   ]
 }
 ```
 
-## How a page's HTML is made
+## Types
 
-The **top level is every page**. Each entry of **`paths`** whose `path` matches the address adds to it, in order:
-a later entry wins a title, a description or a meta tag; code, meta and structured data add up. A `path` is a
-route pattern (`/products/:slug`), an exact address (`/about`), a prefix ending in `*` (`/account/*`) — or a
-list of them.
-
-| Key | Where | What |
+| `type` | What | Its keys |
 | --- | --- | --- |
-| `title` | both | The title; the site's `seo.titleTemplate` wraps it. Unset: the route's `title`, the page's `seo.title`, the site's name |
-| `description`, `image` | both | Unset: the route's, the page's `seo`, then the site's `seo`. A path-only `image` gets the site address in front |
-| `canonical` | both | The page's one true address; `false` writes none. Unset: the site address + the path, without the query |
-| `noindex` | both | Keep search engines out (`<meta name="robots" content="noindex">`) |
-| `lang` | both | `<html lang>`; unset: the site's `locale` |
-| `meta` | both | `name` or `property` → content. `og:*`, `article:*`, `product:*`… are written as `property`, the rest as `name`. A list writes one tag each (several `og:image`s); `null` drops one set before |
-| `jsonld` | both | Structured data, one object or a list, each written as `<script type="application/ld+json">`. Values a binding didn't find are left out, and an object left with nothing is dropped |
-| `head` | both | Any HTML at the end of `<head>`: meta, link, script, style, noscript |
-| `bodyStart` | both | Any HTML right after `<body>` (a tag manager's `<noscript>` frame) |
-| `bodyEnd` | both | Any HTML just before `</body>`: chat widgets, deferred scripts |
-| `root` | both | HTML inside the site's element (`#root`) until the site draws over it — text for crawlers that don't run scripts. The last entry's wins |
-| `path` | entry | What the entry matches (above) |
-| `if` | entry | Only when this holds, once the data is in: `"!product"`, `"product.stock == 0"` — the [conditions](views.md) blocks use |
-| `status` | entry | The answer's status: `404`, `410`… |
-| `data` | entry | Data this path needs beside the page's own: name → API call (`{ "api", "params", "keep" }`). Server only |
+| `seo` | Title, description, share image, canonical, hide from search, language, status | `title`, `description`, `image`, `canonical` (`false`: none), `noindex`, `lang`, `status` (404, 410…) |
+| `meta` | Meta tags. `og:*`, `article:*`, `product:*`… are written as `property`, the rest as `name` | `meta`: name → content; a list writes one tag each; `null` drops one set before |
+| `jsonld` | Structured data (schema.org), each as `<script type="application/ld+json">` | `jsonld`: one object or a list. Values a binding didn't find are left out |
+| `html` | Any snippet, pasted as it is — analytics, pixels, widgets, `<link>`, `<noscript>` | `code`, `where` |
+| `css` | Styles, written as a `<style>` in `<head>` | `code` |
+| `js` | Code written as a `<script>`. A binding in it is a JS value: `{{ product.name }}` → `"Kettle"` (quoted) | `code`, `where` |
+| `script` | A script file by its address | `src`, `attrs` (`async`, `defer`, `type: "module"`, `crossorigin`…), `where` |
+| `root` | HTML inside the site's element (`#root`) until the site draws — text crawlers read without running scripts | `code` |
+| `function` | Code that calls APIs and works values out, then returns what to add | `code`: an ES module, below |
 
-Written for you on every page, then changed by `meta`: `description`, `og:title`, `og:description`, `og:image`,
-`og:url` (the canonical), `og:type` (`website`), `og:site_name`, `twitter:card` (`summary_large_image` with an
-image) and, with `noindex`, `robots`.
+**Every item** has `id`, `name`, `type`, and:
 
-**Status.** 200; **404** for an address no route shows or the not-found route (`*`); **301 / 302** for the
-site's `redirects`; or an entry's `status`. An error page (400 and up) is always `noindex`, with no canonical
-and no structured data.
+| Key | What |
+| --- | --- |
+| `paths` | Route patterns (`/products/:slug`), addresses (`/about`) or prefixes (`/account/*`) it's for; none: every page |
+| `if` | Only when this holds, once the data is in: `"!product"`, `"product.stock == 0"` — the [conditions](views.md) blocks use |
+| `data` | Data it needs beside the page's own: name → API call (`{ "api", "params", "keep" }`) |
+| `enabled` | `false`: kept, not used |
+| `run` | `html`, `css`, `js`, `script`, `function`: **`html`** (default) — in the page's HTML, written by your server, runs as the page loads, search engines see it; **`once`** — added by the site in the browser the first time a page it's for opens, then kept (a library, a widget); **`visit`** — added each time a page it's for opens and removed when it closes (a page-view count). `seo`, `meta`, `jsonld` and `root` are always `html` |
+| `where` | `html`, `js`, `script`: `head` (default) · `bodyStart` · `bodyEnd` |
+
+Items apply **in order**: a later one wins a title, a description or a meta tag; code, meta and structured data
+add up. For the title, description, image and noindex: an item **with paths** wins over the route's own
+(`title` in the manifest's route, or the page's `seo`), and the route wins over an item **for every page** (a
+site default). `seo.titleTemplate` wraps the title. Unset canonical: the site address + the path, no query.
+
+Written on every page, then changed by `meta`: `description`, `og:title`, `og:description`, `og:image`,
+`og:url` (the canonical), `og:type` (`website`), `og:site_name`, `twitter:card` and, with `noindex`, `robots`.
+
+**Status.** 200; **404** for an address no route shows or the not-found route (`*`); **301 / 302** for the site's
+`redirects`; or an `seo` item's `status`. An error page (400 and up) is always `noindex`, with no canonical and
+no structured data.
 
 ## Values — the same bindings as pages
 
 Everything binds like a page: `{{ site.* }}` (with `site.url`, the site's address), `{{ params.* }}`,
 `{{ query.* }}`, `{{ global.* }}` and the page's data by name. **Nothing is written twice:**
 
-- **The page's own data.** `{{ product.name }}` on `/products/:slug` reads the `product` the page file loads —
-  the server makes the same call. A route title of `{{ product.name }}` works in the browser and in the HTML.
-- **Live site details** — a name, logo, phone, social links from your API — are a site-wide state loaded from
-  it (`stateKeys.shop.from`, [states.md](states.md)): `{{ global.shop.logo }}` in the HTML and on the page alike.
-- **`data` on an entry** for what only the HTML needs (a review summary for `aggregateRating`). A source can
-  read another's answer (`{{ product.id }}`); it loads after it.
+- **The page's own data.** `{{ product.name }}` on `/products/:slug` reads the `product` the page loads — the
+  server makes the same call.
+- **Live site details** — a name, logo, phone, social links from your API — are a site-wide state loaded from it
+  (`stateKeys.shop.from`, [states.md](states.md)): `{{ global.shop.logo }}` in the HTML and on the page alike.
+- **`data` on an item** for what only it needs. A source can read another's answer (`{{ product.id }}`); it
+  loads after it.
 
-Only what the bindings read is loaded: a product page's related lists, the signed-in customer and anything
-else unread cost nothing. `keep` (or a state key's `ttl`) keeps an answer on the server that many seconds — a
-shop's details, for example. An answer that fails or is slow (3 s) is left out, and the page still goes out.
+On the server only what the bindings read is loaded; `keep` (or a state key's `ttl`) keeps an answer that many
+seconds. An answer that fails or is slow (3 s) is left out, and the page still goes out. Bound values are made
+safe for where they land: escaped in HTML, plain in CSS, JS values in JS; HTML a function returns is its own.
 
-Bindings in `head`, `bodyStart`, `bodyEnd` and `root` are **escaped as HTML**, so a value from an API can't add
-tags; in `jsonld` they keep their type (`"{{ product.images }}"` is a list) and `<` is escaped. The `then`
-filter writes either-or values: `{{ product.inStock | then: 'in stock' | default: 'out of stock' }}`.
+## Functions
+
+```js
+// Gets the page's values; returns any of: title, description, image, canonical, noindex, status, meta, jsonld,
+// head, bodyStart, bodyEnd, root — added like items of their kinds.
+export default async ({ site, params, query, path, global, data, api, fetch }) => {
+  const { data: stock } = await api.call("stock.get", { params: { id: data.product.id } })
+  return { meta: { "product:availability": stock.left ? "in stock" : "out of stock" } }
+}
+```
+
+`data` holds the page's data and the item's own, by name; `api.call` is the site's registry; `fetch` the
+platform's. In the page HTML, **a function runs only where the host lets it** (`pageDocument`'s
+`runFunctions` — it runs with the server's access, so only for trusted sites); elsewhere it's skipped and named
+in `problems`. The browser runs page-HTML functions too, for the SEO of the pages that follow, and runs `once` /
+`visit` functions, adding what they return.
 
 ## In the browser
 
 The renderer reads the same file. The first page keeps the tags the server wrote (marked `data-syn-seo`); from
-the next page on, the site replaces them with its own — the same title, description, image, canonical, meta and
-structured data, worked out from what the page loaded (an entry's `data` is the server's only). `head`,
-`bodyStart`, `bodyEnd` and `root` run only from the server; for code that should run on chosen pages as the
-visitor moves around, use [snippets](custom-code.md#snippets).
+the next page on, the site writes the same SEO itself — title, description, image, canonical, meta and
+structured data, from what the page loaded (an item's own `data` is the server's only). `html`, `css`, `js`,
+`script` and `root` items that run in the page HTML run once, as it loads; `once` and `visit` items are the
+browser's own (they load their `data` first). The window event `synui:navigate` (`detail.path`) also fires on
+each page change.
 
-Hosts: [../host/renderer.md](../host/renderer.md#every-pages-html) (`pageDocument` + `writeDocument`). In the
-builder: **Code → Every page's HTML** edits the file and previews what the server writes for an address.
-Checks flag a file that doesn't parse, body tags in head code, and calls to APIs the registry lacks.
+## In the builder
 
-The older inline `"document": { "head", "bodyEnd" }` in the manifest still works (every page, no bindings);
-the builder moves it into the file in one click.
+- **Code** (left): **Every page & path rules** — the items for every page and the ones that name paths; **On
+  one page** — each page's own (open that page to edit them); the CSS file and site scripts; **Page scripts**,
+  every page's; and **What your server writes** for any address.
+- **Page tab** (right), **Code & SEO**: the open page's own items (their paths fixed to it), what else runs
+  there (click to edit it in Code), and the page script.
+
+Each item has a **Type** picked from one list, then For, Runs, Goes, its type's fields, Only when and Data it
+reads. Checks flag a file that doesn't parse, body tags in head HTML, unknown APIs, a script with no address,
+paths that don't start with `/`, and functions that need the host's permission.
+
+**Older forms** still work, read as items: the 2.1.0 file (the same keys at its top level and in `paths`
+entries), the manifest's inline `document` (`head`, `bodyEnd`) and `inject` snippets (every page: `once`;
+chosen pages: `visit`). The builder writes them back as one file of items the first time you change one.

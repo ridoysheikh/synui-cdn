@@ -45,24 +45,13 @@ script doesn't export.
 
 `Html` renders `html` in a sandboxed iframe (`height`, `title`) — embeds, widgets.
 
-## Every page's HTML
+## Code in the pages — snippets, CSS, JS, tags
 
-Code that is part of each page's HTML — written by the host's server, not added in the browser — lives in the
-page HTML file (`document.json`): `head`, `bodyStart`, `bodyEnd` and `root` code for every page or chosen
-paths, beside the title, SEO tags and structured data, with live values from your APIs. See
-[page-html.md](page-html.md).
+Code the site puts into its pages — pasted snippets (analytics, pixels, widgets), CSS, JS, script files, meta
+tags, structured data, text for crawlers, and functions that work values out — is one list of typed **code
+items** in the page HTML file (`document.json`). Each is for every page or chosen paths, maybe only when a
+condition holds, with API data of its own; each runs in the page's HTML (written by the host's server) or in the
+browser — once, or on every page view. See [page-html.md](page-html.md).
 
-## Snippets
-
-`manifest.inject` puts HTML snippets — `<script>`, `<meta>`, `<link>`, `<style>`,
-`<noscript>` — into every page or chosen ones:
-
-```json
-"inject": [{ "id": "ga", "name": "Google Analytics", "where": "head", "enabled": true,
-             "pages": ["/", "/products/:slug"], "code": "<script async src=…></script>" }]
-```
-
-Snippets are added by the site in the browser, so they run as the visitor moves between pages; for code that
-must be in the HTML itself, use the page HTML file above. `where`: `head` · `body-start` · `body-end`. They run on the live site only — never in
-the builder, never with `SynUI({ injections: false })`. The window event
-`synui:navigate` (`detail.path`) counts page views of the single-page site.
+The older `manifest.inject` snippets still work, read as `html` items (every page: `once`; chosen pages:
+`visit`); the builder moves them into the file the first time you change one.

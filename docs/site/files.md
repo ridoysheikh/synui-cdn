@@ -16,7 +16,7 @@ pages/x.js          that page's loaders and actions (optional ES module)
 forms/x.json        fields, checks and what happens on submit
 scripts/site.js     actions shared by every page (optional)
 api/registry.json   servers · sign-in schemes · endpoints · actions (flows) · shared schemas
-document.json       each page's HTML, written by the host's server: title, SEO, structured data, code (optional)
+document.json       code items: SEO, meta, structured data, HTML, CSS, JS, functions — per page or path (optional)
 icons.json          drawings of every icon the site uses
 ```
 
@@ -45,8 +45,8 @@ per dynamic route (`/products/:slug`) serves every URL.
 | `scripts` | Site-wide JS modules — [custom-code.md](custom-code.md). |
 | `api` | Registry path (default `api/registry.json`) — the APIs the site calls at run time. |
 | `icons` | Icon drawings (default `icons.json`). |
-| `inject` | Snippets the site adds in the browser, on every page or chosen ones — [custom-code.md](custom-code.md#snippets). |
-| `document` | The page HTML file (`document.json`): what the host's server writes into each page's HTML — SEO, structured data, code, per path — [page-html.md](page-html.md). |
+| `inject` | Deprecated: snippets the site adds in the browser — now `html` items in the page HTML file. Still read. |
+| `document` | The page HTML file (`document.json`): the site's code items — SEO, meta, structured data, HTML, CSS, JS, scripts, crawler text, functions — for every page or chosen paths, in the page's HTML or the browser — [page-html.md](page-html.md). |
 | `prefetch` | `hover` (default) · `visible` · `off` — [data.md](data.md#loading-ahead). |
 | `files` | Published snapshots only: path → content hash. |
 

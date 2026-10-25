@@ -8,7 +8,7 @@ every site installs it (or loads it from a CDN) — and **`@synui/builder`** —
 only the app that edits sites. Three groups of docs: **Host** (putting them in an app), **Site** (the files a
 site is made of — for people, the builder and AI alike) and **Develop** (changing them).
 
-Version: **2.1.0** — see [../CHANGELOG.md](../CHANGELOG.md).
+Version: **3.0.0** — see [../CHANGELOG.md](../CHANGELOG.md).
 
 ---
 
@@ -44,8 +44,8 @@ Version: **2.1.0** — see [../CHANGELOG.md](../CHANGELOG.md).
 | [site/icons.md](site/icons.md) | Iconify names, `icons.json`, how icons draw, the picker | 270 |
 | [site/styles.md](site/styles.md) | Every style setting by group — see-through colours, gradients, shapes and fades, blend, filters, scroll snapping — pinning, screen sizes, motion (appear, scroll-linked, pointer, press, loops, morph), `class`, the safelist | 1780 |
 | [site/theme.md](site/theme.md) | The CSS file (`manifest.css`) and its variables, `theme.json` (`motion`, `scroll: smooth`, `pages: morph`), the Theme pickers, `style.vars`, older sites, fonts | 770 |
-| [site/custom-code.md](site/custom-code.md) | Page and site scripts (`ctx`), the Html block, injections (snippets) | 700 |
-| [site/page-html.md](site/page-html.md) | `document.json`: each page's HTML written by the host's server — title, description, canonical, noindex, meta (Open Graph, Twitter), JSON-LD, head / body / root code, status, per path, live values from the page's data and site-wide states | 1700 |
+| [site/custom-code.md](site/custom-code.md) | Page and site scripts (`ctx`), the Html block, where code in the pages lives | 650 |
+| [site/page-html.md](site/page-html.md) | `document.json`: the site's code items — `seo`, `meta`, `jsonld`, `html`, `css`, `js`, `script`, `root`, `function` — for every page or chosen paths, with `if` and `data`; run in the page HTML (the host's server), once, or on every page view; precedence, status, bindings, functions (`runFunctions`), the browser, the builder (Code, Page tab), older forms | 2300 |
 | [site/libraries.md](site/libraries.md) | `library.json`, item kinds, Templates, the builder's `templates` (a folder, a loader API answering with a JSON pack, `load()`, or the pack attached; build time only, never in the site), the demo catalog in this repo (26 shops, including the MegaHaat marketplace) | 1380 |
 | [site/checks.md](site/checks.md) | `lintSite`, `Suggestion`, everything it checks | 440 |
 

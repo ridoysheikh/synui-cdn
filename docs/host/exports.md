@@ -18,14 +18,14 @@ The CDN script (`synui.js`) puts the same `SynUI` on `window` ([cdn.md](cdn.md))
 
 | Export | What | Doc |
 | --- | --- | --- |
-| Types: `Manifest`, `SiteInfo`, `Route`, `PageFile`, `ComponentFile`, `ComponentInput`, `ViewNode`, `StyleProps`, `ScreenStyle`, `FormFile`, `FormField`, `Theme`, `StateKey`, `Injection`, `DocumentFile`, `DocumentCode`, `DocumentEntry`, `SiteDocument`, `NavItem`, `SiteSeo`, `Redirect` | The site files | [site/files.md](../site/files.md) |
+| Types: `Manifest`, `SiteInfo`, `Route`, `PageFile`, `ComponentFile`, `ComponentInput`, `ViewNode`, `StyleProps`, `ScreenStyle`, `FormFile`, `FormField`, `Theme`, `StateKey`, `Injection`, `DocumentFile`, `CodeItem`, `CodeType`, `DocumentCode`, `DocumentEntry`, `SiteDocument`, `NavItem`, `SiteSeo`, `Redirect` | The site files | [site/files.md](../site/files.md) |
 | Types: `Registry`, `Server`, `AuthScheme`, `Endpoint`, `Param`, `Pagination`, `Schema`, `Flow`, `Step`, `StepKind`, `DataSource` | The API registry and steps | [site/api-registry.md](../site/api-registry.md) |
 | `REGISTRY_PATH`, `STEP_LABEL`, `pathParams`, `endpointParams`, `schemaPaths`, `schemaAt`, `deref`, `inferSchema`, `mergeSchema`, `bodyFromSchema` | Registry helpers | [site/api-registry.md](../site/api-registry.md) |
 | `siteInfo(manifest, vars?)` | What `{{ site.* }}` reads | [site/files.md](../site/files.md) |
 | `SiteSource`, `HttpSource`, `MemorySource`, `loadAllFiles`, `scriptPathFor`, `componentPath`, `formPath` | Reading site files | [renderer.md](renderer.md#sources--for-tools) |
 | `pageDocument`, `PageDocumentConfig`, `PageDocument` | One address's page HTML on the server: status, redirect, title, SEO tags, structured data, code | [renderer.md](renderer.md#every-pages-html) |
 | `writeDocument`, `documentCode`, `DocumentParts` | Write those parts into the HTML you send (or the older inline `manifest.document`) | [renderer.md](renderer.md#every-pages-html) |
-| `pageSeo`, `documentEntries`, `seoTags`, `metaAttr`, `jsonldText`, `PageSeo` | The SEO worked out for a page, as the server and the browser do | [site/page-html.md](../site/page-html.md) |
+| `codeItems`, `itemMatch`, `runsIn`, `itemHtml`, `itemPlace`, `pageSeo`, `seoTags`, `metaAttr`, `jsonldText`, `outputItems`, `runFunction`, `functionContext`, `reads`, `PageSeo`, `FunctionOutput` | The site's code items: all of them (older forms read in), which hold where, their HTML, the SEO worked out for a page, functions | [site/page-html.md](../site/page-html.md) |
 | `allRoutes`, `findRoute`, `mapRoute`, `addRoute`, `layoutOf`, `standsAlone`, `matchPattern`, `routeFor`, `FlatRoute` | Routes (`routeFor`: the route an address shows, with its params) | [site/routes.md](../site/routes.md) |
 | `walk`, `findNode`, `findParent`, `mapNodes`, `updateNode`, `removeNode`, `insertNode`, `shiftNode`, `cloneNode`, `collectIds`, `newId` | Editing view trees | — |
 | `resolve`, `test`, `get`, `filters`, `formatMoney`, `Scope` | Bindings and conditions | [site/views.md](../site/views.md) |

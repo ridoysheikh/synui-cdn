@@ -34,7 +34,7 @@ Everything else is optional, in `options` (`SynUIOptions`):
 | `history` | `"browser" \| "memory"` | `"browser"` | `memory` keeps its own address (a preview inside another app). |
 | `basename` | `string` | — | The site mounted under a path (`/shop`). |
 | `path` | `string` | `"/"` | First page with `history: "memory"`. |
-| `injections` | `boolean` | `true` | Put `manifest.inject` code into the page. Off while prerendering. |
+| `injections` | `boolean` | `true` | Run the site's browser code items (`once`, `visit` — [../site/page-html.md](../site/page-html.md)). Off while prerendering. |
 | `onRouter` | `(router) => void` | — | The React Router instance, when built and again when routes change. |
 | `onError` | `(error) => void` | — | The site couldn't load (manifest or theme missing, bad JSON). |
 
@@ -109,7 +109,9 @@ app.get("*", async (req, res) => {
 **`pageDocument(config)`** — `baseURL` and `manifest` as the renderer gets them, `path` (the address asked for,
 with its query), `vars` (the renderer's `options.vars`: what `{{ site.* }}` reads — an API's base URL, and `url`,
 the address this site answers on, when one site folder serves several domains), `files` (site files already in
-hand), `timeout` (ms to wait for one API answer, default 3000). It finds the route, reads the manifest, the page
+hand), `timeout` (ms to wait for one API answer or function, default 3000), `runFunctions` (run the site's
+`function` items here — they run with your server's access, so only for sites whose code you trust; off, they're
+skipped and named in `problems`). It finds the route, reads the manifest, the page
 HTML file and the page's file, loads only the data the bindings read — the page's own calls and site-wide
 states loaded from an API, the same the browser makes — and answers:
 
@@ -136,9 +138,10 @@ the next page on. The test app's server does all of this for the preview, with r
 ## Security
 
 - Custom HTML blocks render in a sandboxed iframe.
-- `manifest.inject` snippets run only when `options.injections` is on — never in the builder.
-- The page HTML file's code (`head`, `bodyStart`, `bodyEnd`) runs in every page with the site's full access,
-  like injections — which is why a site lives on its own domain. Values bound into it are escaped as HTML.
+- Browser code items (`once`, `visit`) run only when `options.injections` is on — never in the builder.
+- The site's code items run in its pages with the site's full access — which is why a site lives on its own
+  domain. Values bound into them are made safe for where they land. `function` items run on your server only
+  with `runFunctions`.
 - Page scripts are ES modules run in the page (not yet a Worker sandbox): serve the
   site from its **own domain**, where no session cookies live.
 - API keys in a published registry are public: only browser-safe keys belong there.
