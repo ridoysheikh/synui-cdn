@@ -83,7 +83,11 @@ plain `<img>` can't send headers). A 401 / 403 shows on that library as "check i
 ## The design catalog in this repo
 
 `npm run catalog` (`catalog/build.mjs`, from `catalog/base/`) generates `catalog/kroybd/`:
-complete shops with checkout (`shops.mjs`; Bazaar, Atelier, Fresh Market and more), **MegaHaat** — a 28-page
+complete shops with checkout (`shops.mjs`; Bazaar, Atelier, Fresh Market and more), four **large stores** from one
+engine (`catalog/large/`: `skins.mjs` — HaatBazar, Kenakata, Nilam and Sodai, each in the manner of a different big
+marketplace: header, home sections, card and product-page layout, palette and words — and `site.mjs`, 29 pages each on
+the shared registry in `catalog/base`: filters with facet counts, brands, reviews, offers, related products, sign-in by
+SMS code, orders, saved lists, compare and a page HTML file), **MegaHaat** — a 28-page
 marketplace in the manner of the big online stores (`catalog/marketplace/`: dark search-first header with
 departments and account menu; home of card tiles and product strips; search with a filter sidebar in the page
 address; dense product pages with a buy box, offers, bought-together, specs and paged reviews; deals,
