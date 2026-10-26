@@ -44,10 +44,10 @@ Every block also takes `style` ([styles.md](styles.md)), `data`, `each`, `if` an
 
 | Type | Fields | What |
 | --- | --- | --- |
-| `Button` | `label`, `href`, `variant`, `size`, `full`, `icon`, `iconAt`, `says`, `count` | Goes to a page or runs steps (`click`). No label = icon button; `says` for screen readers; `count` shows a number on its corner when above 0 (`{{ global.saved \| count }}`). |
-| `ToggleButton` | `key`, `global`, `value`, `icon`, `iconOn`, `label`, `labelOn`, `variant`, `size`, `says` | Puts `value` in the state list `key` or takes it out — a wishlist heart, compare, follow, like — or flips a yes / no (no `value`). Looks different while on; events `on`, `off`. |
+| `Button` | `label`, `href`, `variant` (default · outline · secondary · ghost · link), `size` (sm · default · lg · xl), `full`, `icon`, `iconAt`, `iconSize` (auto · sm · md · lg · xl), `says`, `count` | Goes to a page or runs steps (`click`). No label = a square icon button; `says` for screen readers; `count` shows a number on its corner when above 0 (`{{ global.saved \| count }}`). Outline and ghost take the colour of what they sit on (light on a dark band), with tints of it on hover and while open; the icon follows the text size unless `iconSize` says. |
+| `ToggleButton` | `key`, `global`, `value`, `icon`, `iconOn`, `label`, `labelOn`, `variant`, `size`, `iconSize`, `says` | Puts `value` in the state list `key` or takes it out — a wishlist heart, compare, follow, like — or flips a yes / no (no `value`). Looks different while on; events `on`, `off`. |
 | `Link` | `label`, `href` | A text link. |
-| `FloatingButton` | `icon`, `label`, `href`, `top`, `corner`, `after` | Fixed in a corner — WhatsApp, call, back to top; shows after scrolling `after`. |
+| `FloatingButton` | `icon`, `iconSize`, `label`, `href`, `top`, `corner`, `after` | Fixed in a corner — WhatsApp, call, back to top; shows after scrolling `after`. |
 
 ## List and data
 
@@ -85,19 +85,19 @@ Controls that narrow, sort and page a list, keeping what's picked in the page ad
 | --- | :-: | --- | --- |
 | `Dialog` | ✓ | `title`, `description`, `size`, `place`, `header`, `close`, `closeIcon`, `scrim`, `state`, `closeOnLink`, `keepOpen` | A window over the page — [overlays.md](overlays.md). |
 | `Sheet` | ✓ | `title`, `description`, `side`, `size`, `inline`, + the same | A panel from an edge — cart, filters, phone menu. `inline` (tablet · desktop): on screens that wide it sits in place instead (a filter sidebar), sliding in on smaller ones. |
-| `Dropdown` | ✓ | `label`, `variant`, `align`, `icon`, `chevron`, `state` | A button opening a short menu. Events `open`, `close`. |
+| `Dropdown` | ✓ | `label`, `variant`, `size`, `align`, `icon`, `iconSize`, `chevron`, `state` | A button opening a short menu. Events `open`, `close`. |
 | `MenuItem` | | `label`, `href`, `danger`, `icon` | One line of a dropdown (`click`). |
 | `Tabs` / `Tab` | ✓ | `Tab.label` | Each Tab is one panel. |
 | `Accordion` | ✓ | `title`, `open` | A title that opens — FAQs, size guides. |
-| `CloseButton` | | `label` | Closes the dialog or sheet it sits in. |
+| `CloseButton` | | `label`, `variant`, `size` | Closes the dialog or sheet it sits in. |
 
 ## Navigation
 
 | Type | Fields | What |
 | --- | --- | --- |
 | `Logo` | `text`, `src` | Store logo or name, linking home. |
-| `NavMenu` (Menu) | `menu`, `vertical`, `look` (links · pills · underline · dropdown · mega), `columns`, `pictures` | A menu from `manifest.nav`. Entries with `children` open a dropdown, or a full-width **mega menu** (each child a column — `image`, `description`, `badge`, its own `children` as links). Vertical menus fold children open in place (phone menus). |
-| `CartButton` | `href`, `label` | Cart icon with the item count. |
+| `NavMenu` (Menu) | `menu`, `vertical`, `look` (links · pills · underline · dropdown · mega), `columns`, `pictures` | A menu from `manifest.nav`. Entries with `children` open a dropdown, or a full-width **mega menu** (each child a column — `image`, `description`, `badge`, its own `children` as links). Vertical menus fold children open in place (phone menus). Links take the menu's text colour (quieter at rest, full on hover and for the page you're on); the menu's `when` states go to each link. |
+| `CartButton` | `href`, `label`, `variant`, `size`, `icon`, `iconSize` | Cart icon (a bag unless `icon` says) with the item count. |
 | `Breadcrumbs` | `items`, `home`, `separator` | Home › … › this page, from `items` (`{ label, href }`) or the address; tells search engines too when `seo.siteUrl` is set. |
 
 ## Motion

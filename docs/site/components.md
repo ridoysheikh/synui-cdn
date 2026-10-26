@@ -34,5 +34,8 @@ A `Component` block uses it:
 - `inputs[].kind`: `text` · `textarea` · `image` · `href` · `boolean` · `number` · `icon`.
 - `data` loads per use; `{{ loading.name }}` / `{{ failed.name }}` as for pages.
 - `tags` say what it can stand in for: the builder's **Swap** on a `header` block offers it.
+- A use with no style of its own adds no box (`display: contents`): the component's blocks sit straight in the
+  parent — a sticky header in a component sticks for the whole page, a component's card is a grid's cell. Give
+  the use a style (padding, a width…) and it becomes a box again.
 
 Sections (bands saved for reuse) are view snippets copied in, not linked; components stay linked.

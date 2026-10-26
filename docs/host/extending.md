@@ -47,11 +47,12 @@ their own module importing only `@synui/renderer`.
 
 ## `FieldSpec`
 
-`{ name, label, kind, options?, optionLabels?, placeholder?, help?, when? }`
+`{ name, label, kind, options?, optionLabels?, placeholder?, help?, when?, advanced? }`
 
 `kind`: `text`, `textarea`, `number`, `select`, `boolean`, `image`, `href`, `icon`,
 `form`, `nav`, `binding`, `code`, `api`, `params`, `component`, `data`, `state`.
 `when: { field, is?, set? }` shows a field only when another one has one of those values (or is set).
+`advanced: true` keeps a rarely changed field under the Content tab's **More options** until it's set.
 
 ## `BlockRenderProps`
 

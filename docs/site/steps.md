@@ -21,7 +21,7 @@ values may bind (`{{ }}`), and a call's answer is kept for the steps after it.
 | `toggle` | `key`, `global?` | Flips a yes / no (a path works here too). |
 | `open` | `target` | Opens a dialog, sheet or dropdown by id. |
 | `close` | `target?` | Closes it (no target: the one opened last). |
-| `navigate` | `to` | Goes to an address; closes every overlay first. |
+| `navigate` | `to` | Goes to an address; closes every overlay first. A full `https://` address (a payment page, another site) loads in the browser — in the builder's canvas it only says where it would go. |
 | `toast` | `text`, `tone?` | A message: `success` · `error` · `info`. |
 | `if` | `when`, `then`, `else?` | Branches on a [condition](views.md#conditions). |
 | `flow` | `flow`, `input?` | **Run an action** (`{{ input.x }}` inside). A failed call inside stops the caller too. |

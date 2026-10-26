@@ -97,7 +97,8 @@ shop's live details on every page, a page-view counter, a function for deal prev
 products, results pages kept out of search) — plus pages, layouts,
 sections, parts, forms and flows, all on the current blocks — moving announcement, hero
 slider, product carousels with loading cases, reviews with stars, zoom spotlight, video,
-before / after, sale countdown, payment-logo marquee, phone menu sheet on `menuOpen`,
+before / after, sale countdown, payment-logo marquee, phone menu sheet on `menuOpen`, checkouts that go on to the
+store's payment page when it asks for money first (`placeOrder` / `payOrder` flows, `checkout.payments` for "Pay with"),
 per-screen layouts. It fetches every icon they use into `icons.json`. Re-run it after
 adding blocks. The test app offers it at `/libs/kroybd/` (public) and the Eid kit at `/libs/signed-in/`
 (behind a bearer token), and a small kit attached as JSON (`test-preview/attached-kit.ts`) — all in the `templates` of `test-preview/builder.tsx`.

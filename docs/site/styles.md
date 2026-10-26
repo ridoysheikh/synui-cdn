@@ -28,6 +28,7 @@ shadow, width, min height and text size also take a CSS variable: `"--section-pa
 | **Look** | `surface` (background · card · muted · primary · secondary · `transparent` · `glass` — see-through and frosted), `tone`, `bg`, `color`, `opacity`, `radius`, `shadow`, `border`, `borderWidth`, `borderSides`, `borderStyle`, `borderColor` |
 | **Effects** | `clip` (circle · ellipse · triangle · diamond · hexagon · star · arch · slant-top · slant-bottom · wave · ticket), `mask` (fade-top · fade-bottom · fade-left · fade-right · fade-x · fade-y · vignette), `blend` (multiply · screen · overlay · darken · lighten · difference · luminosity), `blur` (sm … xl), `backdrop` (frosted glass), `grayscale`, `invert`, `brightness`, `contrast`, `saturate`, `rotate`, `zoom`, `cursor`, `passThrough` (clicks go through) |
 | **Motion** | `enter`, `delay`, `speed`, `ease`, `stagger`, `replay`, `scroll`, `scrollBy`, `hover`, `press`, `loop`, `morph` — see below |
+| **States** | `when`: its look while hovered, pressed, focused, open, current or stuck — see below |
 | **Variables** | `vars`: CSS variables for this block and what's inside — [theme.md](theme.md) |
 
 A `Section` applies the Layout group to its inner centred column, not the full-width band.
@@ -58,13 +59,49 @@ range alone:
 | `phone` | under 768px |
 
 Sizes can change layout, place in the parent, size, overflow and snapping, padding, margins,
-text size / weight / spacing / lines, opacity, corners, shadow and position. Colours, borders,
-effects and motion are the same on every screen. Older `columns: { base, md, lg }` are
-read as a default plus sizes.
+text size / weight / spacing / lines, opacity, corners, shadow, position, **colours** (`bg`, `color`,
+`borderColor` — a light header that turns dark on phones) and **border width** (`borderWidth`, on the
+default's sides). Effects, motion and states are the same on every screen. Older `columns: { base, md, lg }`
+are read as a default plus sizes.
 
 In the builder the Style tab's **Default · Desktop · Tablet · Phone** switch picks what
 the controls change (and moves the canvas to that size); each control shows what it
 follows ("As default: M"), and each size counts its changes, with a Reset.
+
+## States
+
+`when` gives a block a look of its own in a state, over the rest of its style:
+
+```json
+"style": {
+  "surface": "card", "border": true,
+  "when": {
+    "hover": { "bg": "primary", "color": "primary-foreground", "shadow": "md" },
+    "press": { "zoom": "95" },
+    "stuck": { "shadow": "lg", "bg": "background/90" }
+  }
+}
+```
+
+| State | While |
+| --- | --- |
+| `hover` | the pointer is over it (only on devices with a pointer) |
+| `press` | it's held down — a tap or a click |
+| `focus` | it's reached with the keyboard, or someone types in it (a search box) |
+| `open` | the menu, dropdown or panel it opens is open |
+| `current` | it links to the page that's showing, or is the chosen tab / option, or a toggle that's on |
+| `stuck` | a sticky block (`sticky`, or `position: "sticky"`) has reached its edge after the page scrolled |
+
+Each state can set `bg`, `color`, `borderColor` (colours as above, gradients aside), `shadow` (none · sm · md ·
+lg · xl · 2xl), `opacity`, `zoom` (90 · 95 · 105 · 110) and `decoration` (underline · none). A state wins over the
+block's own look and the kit's (a button's own hover colour); colours ease in. A block made of items — `NavMenu`,
+`Tabs` — gives its states to each item: `hover` is the link under the pointer, `current` the page you're on.
+
+In the builder the Style tab's **State** picker (under the screen sizes) chooses which look the controls change; the
+canvas shows that look on the selected block while you edit it. Picking a theme background for a state also sets
+its text colour (brand → brand's text) when none is set.
+
+`hover` / `press` in Motion are ready-made movements (lift, grow, tilt…); `when` is the colours. Both work together.
 
 ## Motion
 
