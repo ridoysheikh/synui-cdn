@@ -17,10 +17,10 @@ See [renderer.md](renderer.md) for every `SynUI` field, [builder.md](builder.md)
 
 ```bash
 # a site
-npm install ./synui-renderer-3.2.0.tgz
+npm install ./synui-renderer-3.3.0.tgz
 
 # the app with the builder (the builder needs the renderer of the same version)
-npm install ./synui-renderer-3.2.0.tgz ./synui-builder-3.2.0.tgz
+npm install ./synui-renderer-3.3.0.tgz ./synui-builder-3.3.0.tgz
 ```
 
 **React 19** is required (`peerDependencies`: `react >=19`, `react-dom >=19`).
@@ -88,6 +88,7 @@ SynUIBuilder({
   templates: [{ name: "Designs", url: "https://cdn.example.com/designs/" }],
   mediaAPI: { url: "https://media.example.com/files", dir: "acme/", headers: () => ({ Authorization: `Bearer ${token()}` }) },
   onSave: async (changes) => uploadAll(changes),                  // path → new text, or null for a deleted file
+  onPublish: async ({ note }) => publishSite(note),               // optional: a Publish button (saves first)
   options: { back: { href: "/settings", label: "Settings" } },
 }).render()
 ```
