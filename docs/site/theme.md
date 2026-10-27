@@ -36,7 +36,7 @@ lines and fields, status, charts, greys, `--radius`, `--font`). Change a value, 
 | Where | What |
 | --- | --- |
 | Code → `styles/global.css` | The file as text. |
-| Theme | Pickers for the main colours (with contrast against the text on them), corners, font, motion, scrolling and the page change; your own colour variables too. **Each picker writes its variable in the same file** — nothing is kept anywhere else. |
+| Theme | Pickers for the main colours (with contrast against the text on them), corners, font, motion, scrolling and the page change; **Form fields** (background, text, border, focus border and ring, corners, widths — [forms.md](forms.md#how-it-looks)); your own colour variables too. **Each picker writes its variable in the same file** — nothing is kept anywhere else. |
 | Style controls | Spacing, corners, shadow, text size, width and height offer your own variables of the fitting kind beside their fixed steps: `"paddingY": "--section-pad"` → `padding-block: var(--section-pad)`. |
 | Colour pickers | Your own colour variables, under "Yours": `"bg": "brand-gold"`. |
 | A block's Style → Advanced → Variables here | `style.vars`: variables for one block and everything inside — another `primary` for one band: `"vars": { "primary": "#b91c1c" }`. |

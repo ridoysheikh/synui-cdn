@@ -8,7 +8,7 @@ every site installs it (or loads it from a CDN) — and **`@synui/builder`** —
 only the app that edits sites. Three groups of docs: **Host** (putting them in an app), **Site** (the files a
 site is made of — for people, the builder and AI alike) and **Develop** (changing them).
 
-Version: **3.2.0** — see [../CHANGELOG.md](../CHANGELOG.md).
+Version: **3.6.0** — see [../CHANGELOG.md](../CHANGELOG.md).
 
 ---
 
@@ -37,7 +37,7 @@ Version: **3.2.0** — see [../CHANGELOG.md](../CHANGELOG.md).
 | [site/data.md](site/data.md) | Data sources (`wait`, `keep`, `ahead`), loading ahead, lists, filtered lists in the page address (search, filters, sort, pages, a filter sidebar), loading states, the built-in cart | 1370 |
 | [site/api-registry.md](site/api-registry.md) | Servers, auth schemes, endpoints, pagination, schemas, examples | 820 |
 | [site/steps.md](site/steps.md) | Every step (`query` — the page address), actions, which blocks fire which events | 1040 |
-| [site/forms.md](site/forms.md) | Form files: fields (`password` too), checks, submit, `load`, `optionsFrom`, status | 470 |
+| [site/forms.md](site/forms.md) | Form files: fields (`password` too), checks, submit, `load`, `optionsFrom`, status; how a Form looks — field size, look, labels, the button, the field variables | 960 |
 | [site/components.md](site/components.md) | Components, inputs, `Slot`, per-use data, tags for Swap | 380 |
 | [site/blocks.md](site/blocks.md) | Every block, by kind (Layout, Text, Media, Actions, List, Filter, Form, Overlay, Navigation, Motion, Commerce, Embed), with its fields | 2470 |
 | [site/overlays.md](site/overlays.md) | Dialog / Sheet design, opening and closing, `keepOpen`, `closeOnLink`, site-wide keys, events | 640 |
@@ -46,6 +46,7 @@ Version: **3.2.0** — see [../CHANGELOG.md](../CHANGELOG.md).
 | [site/theme.md](site/theme.md) | The CSS file (`manifest.css`) and its variables, `theme.json` (`motion`, `scroll: smooth`, `pages: morph`), the Theme pickers, `style.vars`, older sites, fonts | 770 |
 | [site/custom-code.md](site/custom-code.md) | Page and site scripts (`ctx`), the Html block, where code in the pages lives | 650 |
 | [site/page-html.md](site/page-html.md) | `document.json`: the site's code items — `seo`, `meta`, `jsonld`, `html`, `css`, `js`, `script`, `root`, `function` — for every page or chosen paths, with `if` and `data`; run in the page HTML (the host's server), once, or on every page view; precedence, status, bindings, functions (`runFunctions`), the browser, the builder (Code, Page tab), older forms | 2300 |
+| [site/locked.md](site/locked.md) | Locked parts (`locked` on a block, page, component, form or flow): restyle, never rewire — what stays, what changes, `sealLocks`, the checks, in a library | 650 |
 | [site/libraries.md](site/libraries.md) | `library.json`, item kinds, Templates, the builder's `templates` (a folder, a loader API answering with a JSON pack, `load()`, or the pack attached; build time only, never in the site), the demo catalog in this repo (30 shops: the four large stores from `catalog/large` and the MegaHaat marketplace among them) | 1380 |
 | [site/checks.md](site/checks.md) | `lintSite`, `Suggestion`, everything it checks | 440 |
 

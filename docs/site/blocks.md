@@ -76,7 +76,7 @@ Controls that narrow, sort and page a list, keeping what's picked in the page ad
 
 | Type | Fields | What |
 | --- | --- | --- |
-| `Form` | `form`, `columns` | A form file — [forms.md](forms.md). |
+| `Form` | `form`, `columns`, `fieldSize`, `fieldLook`, `labels`, `submitLook`, `submitSize`, `submitFull`, `submitAlign` | A form file — [forms.md](forms.md); its look in [forms.md § How it looks](forms.md#how-it-looks). |
 | `Stepper` (Number stepper) | `key`, `global`, `min`, `max`, `step`, `label` | A number with − / +, kept in a state: how many, guests, nights. Event `change`. |
 
 ## Overlay

@@ -47,12 +47,14 @@ their own module importing only `@synui/renderer`.
 
 ## `FieldSpec`
 
-`{ name, label, kind, options?, optionLabels?, placeholder?, help?, when?, advanced? }`
+`{ name, label, kind, options?, optionLabels?, placeholder?, help?, when?, advanced?, logic? }`
 
 `kind`: `text`, `textarea`, `number`, `select`, `boolean`, `image`, `href`, `icon`,
 `form`, `nav`, `binding`, `code`, `api`, `params`, `component`, `data`, `state`.
 `when: { field, is?, set? }` shows a field only when another one has one of those values (or is set).
 `advanced: true` keeps a rarely changed field under the Content tab's **More options** until it's set.
+`logic: true` marks a select, switch or number that changes what the block does (a data source, a range, site-wide
+state), so it stays as it is inside a [locked part](../site/locked.md); look settings leave it out.
 
 ## `BlockRenderProps`
 
