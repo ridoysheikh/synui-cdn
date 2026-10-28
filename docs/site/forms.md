@@ -26,11 +26,13 @@ block shows it (`props.form`: a name in `forms/`, `columns`).
 
 | Field | What |
 | --- | --- |
-| `name`, `label`, `type` | `text` · `email` · `phone` · `number` · `password` (hides what is typed) · `textarea` · `select` · `checkbox` |
+| `name`, `label`, `type` | `text` · `email` · `phone` · `number` · `password` (hides what is typed) · `textarea` · `select` · `checkbox` · `search` (a search box) · `searchselect` (a select you type into to find a choice) · `address` (one place — below) |
 | `placeholder`, `help` | Hints. |
 | `required`, `min`, `max`, `pattern` | Checks, run before submit. |
 | `options` | A select's choices: `[{ label, value }]`. |
-| `optionsFrom` | A select's choices from an API: `{ api, params?, label, value }` naming the item fields. |
+| `optionsFrom` | A select's or searchselect's choices from an API — `{ api, params?, label, value }` — or a data set of the site — `{ dataset, label, value }` — naming the item fields. `where: { field, is }` keeps the items whose `field` equals the form's field `is` (areas of the picked district); picking another value there empties this one. |
+| `free` | A searchselect: what's typed is a value too, not only the choices. |
+| `places` | An address field: the data set of places (default `bd-places`). |
 | `default` | Its value before anyone types. |
 | `span` | `1` or `2` grid columns on wide screens. |
 
@@ -63,6 +65,20 @@ Colours, edges, corners and the focus ring are **field variables** — the Theme
 The ones that follow have no line in the CSS file until you set them, so a band or a form that sets only
 `--field` or `--field-border-focus` gets matching hover, focus and ring colours, and a field on a dark band takes
 that band's text colour.
+
+## Address
+
+`type: "address"` is one value, `{ address, area, district }` — the shape shop APIs take: the district picked (by
+typing) from a places data set — items `{ name, division?, areas?: [] }` — then the area (that district's `areas`,
+or typed), then the house and road. `required` asks for the district and the address line. Send it as
+`{{ values.place.district }}` and so on, or whole: `"shipping": "{{ values.place }}"`.
+
+## Data sets
+
+Fixed lists the site carries — districts, sizes, delivery slots — one file each in `data/` (`data/bd-places.json`):
+an array, or `{ name, description, items: [...] }`. The manifest lists them (`datasets`; the builder keeps it); a
+site loads the ones its forms name. They're a library kind too (`kind: "data"`, Library → Data sets): add one in a
+click, and a form or page set that uses one brings it along (the site's own of that name stays).
 
 ## Submit
 

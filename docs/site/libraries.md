@@ -18,13 +18,19 @@ sections, components, forms and flows. Taking one **copies** it into the site.
 
 | Item field | What |
 | --- | --- |
-| `id`, `kind`, `name` | `kind`: `site` (shop template) · `pages` (page set) · `page` · `layout` · `section` · `component` · `form` · `flow`. **An item without a kind is skipped.** |
+| `id`, `kind`, `name` | `kind`: `site` (shop template) · `pages` (page set) · `page` · `layout` · `section` · `component` · `form` · `flow` · `data` (data set, `data/<id>.json`). **An item without a kind is skipped.** |
 | `file` / `manifest` | The item's JSON, or a site's manifest, relative to the library. |
 | `description`, `tags` | `tags` say what it can stand in for (a `header`) — the builder's Swap. |
 | `category` | Its one category (`hero`, `checkout`, `heading`) — the browser's Category filter and Swap's "same kind" (a hero is swapped for heroes). Default: its first tag that isn't a kind word. |
 | `locked` | Who keeps what it does — [locked.md](locked.md). |
 | `thumbnail` | A picture instead of a live preview. |
 | `path`, `title` | A page's suggested address and title. |
+
+**A large library can be served in pages.** A server answers `library.json` with the first page of `items` and
+`next` (where the next page starts); the builder then asks `library.json?cursor=<next>` — answered with
+`{ "items": [...], "next": … }` — until `next` is missing or `null`. A static file simply has no `next`. Item
+files are always read one by one, when an item is previewed or added, so only the index is paged. (A pack — the
+whole library as one JSON — can't be paged: keep packs for small kits.)
 
 A flow file is a registry flow plus `needs` — the servers and endpoints it calls, added
 when missing. A section or component file may carry `needs.vars` — CSS variables it draws with and a value for each,
@@ -48,7 +54,7 @@ customer's account — added in one click. Its files sit beside `set.json` at th
 Adding it writes, in one undo step: every page at its address (a page already there is replaced, its sub-pages kept —
 the builder lists what it replaces and asks twice), their layouts, components, forms and scripts under their own
 names, the flows (replacing same-named ones) and the endpoints and servers the site lacks, state the site doesn't
-have, and CSS variables it doesn't set. The browser previews it on a copy of the site, page by page. A library may bring `icons.json`; items bring the drawings they use.
+have, and CSS variables it doesn't set. The browser previews it on a copy of the site, page by page. Its routes carry `group` (`group` in the set file, default its name): the builder's Pages lists them together, locked, removed or swapped for another design as a whole — New page → Page group adds one. A library may bring `icons.json`; items bring the drawings they use.
 
 Also accepted as a library URL: a site folder (its components and pages become items)
 or a single component / page file.
