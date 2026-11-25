@@ -37,6 +37,34 @@ export async function addBoth({ cart, toast, item }) {      // a step: { "do": "
 
 **Loader `ctx`**: `params`, `query`, `site`, `session`, `api`, `cart`.
 
+### `start(ctx)` — when the site opens
+
+A site script may export `start`: it runs once when the site opens, to keep a site-wide value current from a
+socket, a timer or another tab, and is stopped when the site goes away. Blocks then bind to the value
+(`{{ global.chat.messages }}`) and steps run the script's other exports (`{ "do": "run", "fn": "send" }`).
+
+```js
+// scripts/site.js (listed in manifest.scripts)
+export function start({ setGlobal, onStop }) {
+  const ws = new WebSocket("wss://live.example.com/feed")
+  ws.onmessage = (e) => setGlobal("feed", JSON.parse(e.data))
+  onStop(() => ws.close())
+}
+```
+
+| Name | What |
+| --- | --- |
+| `site` | The site's values (`{{ site.* }}`) |
+| `session()`, `global()` | The signed-in customer and the site-wide values, now |
+| `setGlobal(key, value)` | Set a site-wide value; does nothing once the site has stopped |
+| `api` | The site's API registry: `await api.call(name, { params, body })` |
+| `onSession(fn)` | Called on sign-in and sign-out, in this tab or another; returns a function that stops it |
+| `onStop(fn)` | Called when the site stops (its files reloaded, the renderer unmounted): close sockets, clear timers |
+
+A start that throws (or whose promise fails) is reported in the console; the others still run. In the builder it runs
+only while **Try it** is on — on the canvas a key keeps the value set in States, so the design can be tried with
+example values. `StartCtx` is exported from `@synui/renderer/core`.
+
 Scripts run in the page as blob modules (a Worker sandbox is not built yet), so the
 site must live on its own domain. Checks flag a step or form naming a function the
 script doesn't export.

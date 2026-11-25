@@ -109,8 +109,16 @@ SynUIBuilder({
 })
 ```
 
-They show in the API panel and are merged into the site's `api/registry.json` (same names replaced, the
-site's own others kept), so the built site carries them and the renderer calls them.
+They show in the API panel and are merged into the site's `api/registry.json`, so the built site carries them and
+the renderer calls them:
+
+- **Kept** — the app's `servers`, `auth`, `endpoints` and `schemas` always replace the site's copy of the same name,
+  and can't be changed: the API panel and Site settings mark them with a lock ("From the app"), they can be read and
+  tried, never renamed, edited or deleted, and the builder refuses any write that would (Code included). A site may
+  add its own entries beside them. A host that must be sure writes them back on its server too.
+- **Defaults** — the app's `flows` fill in only the names the site lacks; a site's own copy of one (changed in
+  States → Actions) stays, and one deleted comes back the next time the builder opens.
+- The merge is where the site starts, not a change to undo.
 
 The API panel is one flat, searchable list of endpoints. An endpoint is written as examples:
 

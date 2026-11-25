@@ -25,7 +25,7 @@ type Suggestion = {
 | --- | --- |
 | logic | A step calls an API or flow not in the registry, opens an id no overlay has, runs a function the script doesn't export; a value read from `global` that nothing sets; a States block without data; a Case or Slot outside its parent; an endpoint on an undefined server or auth scheme |
 | links | A link or `navigate` to an address with no route; a page nothing links to; a missing not-found route; a path declared twice; a route whose page file is missing |
-| forms | A form that doesn't exist, does nothing when sent, says nothing after, or submits to a missing function |
+| forms | A form that doesn't exist, does nothing when sent, says nothing after, or submits to a missing function; **the contract** — a call that doesn't send a field its endpoint's body `required` lists: a step's body object without the key, a form sending `{{ values }}` without that field, or a form's values handed to an action (`input: { values: "{{ values }}" }`) whose call maps the key from a field the form doesn't have (`{{ input.values.phone }}`) — an error; a form sending `{{ values }}` with a field the body schema's `properties` don't have — a warning (it is left out). A value Checks can't read (a script, a binding built elsewhere) is left alone. |
 | content | No level-1 heading, images without alt text, an icon not saved in `icons.json`, a component that isn't defined, sub-pages without a Page slot, a dynamic page that loads no data |
 | seo | Missing or too long titles (60) and descriptions (160), duplicate titles, no share image, no `siteUrl` |
 | performance | A page file over 24 KB |
