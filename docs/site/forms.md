@@ -24,6 +24,10 @@ block shows it (`props.form`: a name in `forms/`, `columns`).
 
 ## Fields
 
+A form file may say what it is with `tags` (`["order"]`, `["contact"]`): the builder's Swap on a Form block showing
+it then offers forms and pieces of that kind.
+
+
 | Field | What |
 | --- | --- |
 | `name`, `label`, `type` | `text` · `email` · `phone` · `number` · `password` (hides what is typed) · `textarea` · `select` · `checkbox` · `search` (a search box) · `searchselect` (a select you type into to find a choice) · `address` (one place — below) |
@@ -34,7 +38,7 @@ block shows it (`props.form`: a name in `forms/`, `columns`).
 | `free` | A searchselect: what's typed is a value too, not only the choices. |
 | `places` | An address field: the data set of places (default `bd-places`). |
 | `default` | Its value before anyone types. |
-| `span` | `1` or `2` grid columns on wide screens. |
+| `span` | `1` or `2` grid columns on wide screens. In a two-column form a `textarea` and an `address` always take the whole row. |
 
 ## How it looks
 
@@ -72,6 +76,7 @@ that band's text colour.
 typing) from a places data set — items `{ name, division?, areas?: [] }` — then the area (that district's `areas`,
 or typed), then the house and road. `required` asks for the district and the address line. Send it as
 `{{ values.place.district }}` and so on, or whole: `"shipping": "{{ values.place }}"`.
+Its District and Area sit side by side when the field is wide enough, else one under the other.
 
 ## Data sets
 

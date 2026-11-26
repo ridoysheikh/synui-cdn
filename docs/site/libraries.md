@@ -24,6 +24,7 @@ sections, components, forms and flows. Taking one **copies** it into the site.
 | `category` | Its one category (`hero`, `checkout`, `heading`) — the browser's Category filter and Swap's "same kind" (a hero is swapped for heroes). Default: its first tag that isn't a kind word. |
 | `locked` | Who keeps what it does — [locked.md](locked.md). |
 | `thumbnail` | A picture instead of a live preview. |
+| `featured` | Shown in the Add menu under its category, beside the blocks (components, sections, forms). |
 | `path`, `title` | A page's suggested address and title. |
 
 **A large library can be served in pages.** A server answers `library.json` with the first page of `items` and
@@ -33,8 +34,22 @@ files are always read one by one, when an item is previewed or added, so only th
 whole library as one JSON — can't be paged: keep packs for small kits.)
 
 A flow file is a registry flow plus `needs` — the servers and endpoints it calls, added
-when missing. A section or component file may carry `needs.vars` — CSS variables it draws with and a value for each,
-written to the site's CSS file only where the site doesn't set them.
+when missing. A section or component file may carry `needs` too, which makes it a **kit** — one piece that works
+wherever it is dropped or swapped in:
+
+| `needs.` | Brought in where the site lacks it |
+| --- | --- |
+| `vars` | CSS variables it draws with and a value for each, into the site's CSS file. |
+| `flows`, `endpoints`, `servers` | Actions it runs and the API calls and servers they use, into the API registry. |
+| `state` | The page state it reads (`{ "qty": 1 }`), onto the page it lands on. |
+| `scripts` | Site scripts (`scripts/pay.js`, carried in the library beside it), into the manifest. |
+
+The site's own always stays: a flow, endpoint or state key of the same name isn't replaced.
+
+Swap offers the **same kind**: the block's own `tags`, its component's `tags`, or its form's `tags` (a Form showing an
+`order` form is an order) — the generic "form" or block type only when none say. A form swapped onto a Form block
+changes only which form it shows. An item with `featured: true` also shows in the builder's Add menu, under its
+category.
 
 ### Page sets
 

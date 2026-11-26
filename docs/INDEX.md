@@ -8,7 +8,7 @@ every site installs it (or loads it from a CDN) — and **`@synui/builder`** —
 only the app that edits sites. Three groups of docs: **Host** (putting them in an app), **Site** (the files a
 site is made of — for people, the builder and AI alike) and **Develop** (changing them).
 
-Version: **3.9.1** — see [../CHANGELOG.md](../CHANGELOG.md).
+Version: **3.11.0** — see [../CHANGELOG.md](../CHANGELOG.md).
 
 ---
 

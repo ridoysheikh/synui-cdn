@@ -31,7 +31,11 @@ A `Component` block uses it:
 
 - Inside, `{{ props.x }}` reads what the use passed (or the input's `default`).
 - A `Slot` block shows the blocks put inside that use.
-- `inputs[].kind`: `text` · `textarea` · `image` · `href` · `boolean` · `number` · `icon`.
+- `inputs[].kind`: `text` · `textarea` · `image` · `href` · `boolean` · `number` · `icon` · `select` (one of
+  `options`: strings or `{ label, value }`) · `color` · `range` (`min`, `max`, `step`) · `pick` (one record of a list
+  endpoint `api`, shown by `labelAt`, kept as `valueAt`, else its `id` — a product for a product card). `help` is a
+  line under the field.
+- `needs` makes it a kit: what it needs from the site, brought in with it — [libraries.md](libraries.md).
 - `data` loads per use; `{{ loading.name }}` / `{{ failed.name }}` as for pages.
 - `tags` say what it can stand in for: the builder's **Swap** on a `header` block offers it.
 - A use with no style of its own adds no box (`display: contents`): the component's blocks sit straight in the

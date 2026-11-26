@@ -12,6 +12,7 @@ Every block also takes `style` ([styles.md](styles.md)), `data`, `each`, `if` an
 | `Section` | ✓ | `width`, `tag`, `image`, `video`, `wash`, `still` | A full-width band; its content sits in a centred column (layout settings apply to that column). `video`: an .mp4 / .webm playing muted and looping behind it. |
 | `Stack` | ✓ | — | Blocks in a row or a column. |
 | `Grid` | ✓ | — | Equal columns, changing per screen size. |
+| `Columns` | ✓ | `ratio` (1:1 · 2:1 · 1:2 · 3:2 · 2:3 · 1:1:1 · 1:2:1 · 1:1:1:1), `stack` (small · medium · large · never) | Columns side by side by a ratio, each child one column; they stack when the block itself is narrower than 448 / 672 / 896 px (its own width, so a side panel stacks too). |
 | `Box` | ✓ | — | A card-like panel. |
 | `Spacer` | | `size` | Empty space. |
 | `Divider` | | — | A thin line. |
